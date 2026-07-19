@@ -21,24 +21,14 @@ try {
     die("Erreur lors de la récupération des contacts : " . $e->getMessage());
 }
 ?>
-<!DOCTYPE html>
-<html lang="fr" class="font-sans">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mes contacts</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-</head>
+<?php require 'elements/header.php' ?>
 
 <body>
-
     <div class="min-h-screen bg-stone-50">
         <main class="max-w-7xl mx-auto p-4 md:p-10">
             <header class="flex items-center justify-between mb-8">
                 <h1 class="text-xl md:text-2xl font-medium text-stone-900">Mes contacts</h1>
-                <a href="#add" class="self-end w-fit rounded-md px-4 py-2 bg-violet-500 text-white text-xs md:text-sm font-medium hover:bg-violet-600 transition duration-300 ease-in-out">Ajouter un contact</a>
+                <a href="form_contact.php" class="self-end w-fit rounded-md px-4 py-2 bg-violet-500 text-white text-xs md:text-sm font-medium hover:bg-violet-600 transition duration-300 ease-in-out">Ajouter un contact</a>
             </header>
             <section>
                 <?php if (empty($contacts)): ?>
