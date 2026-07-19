@@ -1,0 +1,7 @@
+# system files & code editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# log file
+*.log
