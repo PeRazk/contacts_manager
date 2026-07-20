@@ -76,7 +76,7 @@ try {
                                         <td class="py-2 px-4 flex justify-between items-center">
                                             <a href="#edit" class="text-neutral-600 hover:text-neutral-800 transition duration-150 ease-in-out">
                                                 <i class="ph-duotone ph-pencil text-lg"></i></a>
-                                            <a href="#delete" class="text-red-500 hover:text-red-600 transition duration-150 ease-in-out">
+                                            <a href="actions/delete_contact.php?id=<?= $contact['id'] ?>" class="text-red-500 hover:text-red-600 transition duration-150 ease-in-out">
                                                 <i class="ph-duotone ph-trash text-lg"></i></a>
                                         </td>
                                     </tr>
