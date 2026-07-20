@@ -18,27 +18,28 @@ $phone = '';
 $jobTitle = '';
 $deptId = 0;
 
-if (isset($_GET['id']) && !empty($_GET['id'])) {
-    $id = (int)$_GET['id'];
-
-    $sql = "SELECT * FROM contacts WHERE id = ?";
-    $stmt = $db->prepare($sql);
-    $stmt->execute([$id]);
-    $contact = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($contact) {
-        $isEdit = true;
-
-        $firstName = htmlspecialchars($contact['first_name']);
-        $lastName  = htmlspecialchars($contact['last_name']);
-        $email     = htmlspecialchars($contact['email']);
-        $phone     = htmlspecialchars($contact['phone']);
-        $jobTitle  = htmlspecialchars($contact['job_title']);
-        $deptId    = (int)$contact['department_id'];
-    }
-}
-
 try {
+
+    if (isset($_GET['id']) && !empty($_GET['id'])) {
+        $id = (int)$_GET['id'];
+
+        $sql = "SELECT * FROM contacts WHERE id = ?";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$id]);
+        $contact = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($contact) {
+            $isEdit = true;
+
+            $firstName = htmlspecialchars($contact['first_name'] ?? '');
+            $lastName  = htmlspecialchars($contact['last_name'] ?? '');
+            $email     = htmlspecialchars($contact['email'] ?? '');
+            $phone     = htmlspecialchars($contact['phone'] ?? '');
+            $jobTitle  = htmlspecialchars($contact['job_title'] ?? '');
+            $deptId    = (int)($contact['department_id'] ?? 0);
+        }
+    }
+
     $stmt = $db->query("SELECT id, name FROM departments ORDER BY name ASC");
     $departments = $stmt->fetchAll();
 } catch (PDOException $e) {
