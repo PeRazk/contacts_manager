@@ -13,7 +13,7 @@ try {
     $query = "SELECT contacts.*, departments.name AS department_name, departments.color AS department_color 
               FROM contacts 
               LEFT JOIN departments ON contacts.department_id = departments.id 
-              ORDER BY contacts.last_name ASC, contacts.first_name ASC";
+              ORDER BY contacts.created_at DESC";
 
     $stmt = $db->query($query);
     $contacts = $stmt->fetchAll();

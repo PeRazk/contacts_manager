@@ -19,8 +19,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $jobTitle = isset($_POST['job_title']) ? trim($_POST['job_title']) : '';
     $departmentId = isset($_POST['department_id']) ? (int)$_POST['department_id'] : 0;
 
-    // Check if phone is empty and store NULL instead of an empty string in the database
-    if (empty($phone)) {
+    // Check if phone is filled and if the format is ok 
+    if (!empty($phone)) {
+        $phoneRegex = '/^(?:(?:\+|00)33|0)[1-9](?:[\s.-]*\d{2}){4}$/';
+        if (!preg_match($phoneRegex, $phone)) {
+            die("Erreur : Le numéro de téléphone n'est pas valide.");
+        }
+    } else {
+        // if phone is empty store NULL instead of an empty string in the database
         $phone = null;
     }
 

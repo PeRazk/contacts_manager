@@ -58,7 +58,7 @@ try {
                     <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6">
                         <div class="w-full md:w-1/2">
                             <label for="phone" class="block text-sm font-medium text-stone-700 mb-2">Numéro de téléphone</label>
-                            <input type="text" id="phone" name="phone"
+                            <input type="tel" id="phone" name="phone" oninput="this.value = this.value.replace(/[^0-9+\s.-]/g, '')" pattern="^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$"
                                 class="w-full px-3 py-2 rounded-lg text-sm border border-stone-300 focus:outline-hidden focus:border-violet-500 focus:ring-3 focus:ring-violet-100
                                  transition duration-300 ease-in-out"
                                 placeholder="0612345678">
