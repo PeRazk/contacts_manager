@@ -6,12 +6,12 @@
  * Fetches all contacts from the database with their associated department
  * Search input
  */
-
+session_start();
 require_once 'config/database.php';
 $db = getDatabaseConnection();
 
 $search = trim($_GET['search'] ?? '');
-$contact = [];
+$contacts = [];
 
 try {
     if (!empty($search)) {
@@ -36,7 +36,10 @@ try {
 
     $contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    die("Erreur lors de la récupération des contacts : " . $e->getMessage());
+    $_SESSION['toast'] = [
+        'type' => 'error',
+        'message' => 'Impossible de charger la liste des contacts.'
+    ];
 }
 
 ?>
@@ -45,6 +48,44 @@ try {
 <body>
     <div class="min-h-screen bg-stone-50">
         <main class="max-w-7xl mx-auto p-4 md:p-10">
+            <?php if (isset($_SESSION['toast'])): ?>
+                <?php
+                $toast = $_SESSION['toast'];
+                unset($_SESSION['toast']);
+                $isSuccess = ($toast['type'] === 'success');
+                ?>
+                <div id="toast" class="max-w-2xl bg-white absolute z-50 bottom-6 right-6 flex items-center space-x-4 p-4 rounded-lg shadow-[0_0_18px_2px_rgba(0,0,0,0.12)] transition-opacity duration-500">
+                    <div class="flex items-center space-x-3 flex-shrink-0">
+                        <?php if ($isSuccess): ?>
+                            <div class="h-12 w-0.75 rounded-full bg-green-500"></div>
+                            <div class="bg-green-500 rounded-full w-6 h-6 flex items-center justify-center">
+                                <i class="ph-bold ph-check text-base text-white"></i>
+                            </div>
+                        <?php else: ?>
+                            <div class="h-12 w-0.75 rounded-full bg-red-500"></div>
+                            <div class="bg-red-500 rounded-full w-6 h-6 flex items-center justify-center">
+                                <i class="ph-bold ph-exclamation-mark text-base text-white"></i>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    <div>
+                        <p class="font-medium text-stone-800 leading-5"><?= $isSuccess ? "Succès" : "Erreur" ?></p>
+                        <p class="text-sm text-stone-500 leading-5"><?= htmlspecialchars($toast['message']) ?></p>
+                    </div>
+                    <button onclick="document.getElementById('toast').remove()" class="cursor-pointer self-start text-stone-400 hover:text-stone-600 text-xs md:text-sm leading-0 transition duration-150 ease-in-out">
+                        <i class="ph-bold ph-x text-sm"></i>
+                    </button>
+                </div>
+                <script>
+                    setTimeout(() => {
+                        const toast = document.getElementById('toast');
+                        if (toast) {
+                            toast.style.opacity = '0';
+                            setTimeout(() => toast.remove(), 500);
+                        }
+                    }, 4000);
+                </script>
+            <?php endif; ?>
             <header class="flex items-center justify-between mb-8">
                 <h1 class="text-xl md:text-2xl font-medium text-stone-900">Mes contacts</h1>
                 <a href="form_contact.php" class="self-end w-fit rounded-md px-4 py-2 bg-violet-500 text-white text-xs md:text-sm font-medium hover:bg-violet-600 transition duration-300 ease-in-out">Ajouter un contact</a>

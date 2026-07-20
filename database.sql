@@ -1,3 +1,9 @@
+CREATE DATABASE IF NOT EXISTS `contacts_dev` 
+CHARACTER SET utf8mb4 
+COLLATE utf8mb4_unicode_ci;
+
+USE `contacts_dev`;
+
 DROP TABLE IF EXISTS `contacts`;
 DROP TABLE IF EXISTS `departments`;
 

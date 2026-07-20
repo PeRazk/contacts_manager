@@ -4,7 +4,7 @@
  * Add a new contact into the database
  * 
  */
-
+session_start();
 require_once __DIR__ . '/../config/database.php';
 $db = getDatabaseConnection();
 
@@ -23,7 +23,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($phone)) {
         $phoneRegex = '/^(?:(?:\+|00)33|0)[1-9](?:[\s.-]*\d{2}){4}$/';
         if (!preg_match($phoneRegex, $phone)) {
-            die("Erreur : Le numéro de téléphone n'est pas valide.");
+            $_SESSION['toast'] = [
+                'type' => 'error',
+                'message' => 'Le numéro de téléphone n\'est pas valide.'
+            ];
+            header("Location: ../index.php");
+            exit();
         }
     } else {
         // if phone is empty store NULL instead of an empty string in the database
@@ -32,12 +37,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Check if all required fields are filled
     if (empty($firstName) || empty($lastName) || empty($email) || empty($jobTitle) || empty($departmentId)) {
-        die("Erreur : Tous les champs obligatoires doivent être remplis.");
+        $_SESSION['toast'] = [
+            'type' => 'error',
+            'message' => 'Tous les champs obligatoires doivent être remplis.'
+        ];
+        header("Location: ../index.php");
+        exit();
     }
 
     // Check email format
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        die("Erreur : Le format de l'adresse email n'est pas valide.");
+        $_SESSION['toast'] = [
+            'type' => 'error',
+            'message' => 'Le format de l\'adresse email n\'est pas valide.'
+        ];
+        header("Location: ../index.php");
+        exit();
     }
 
     try {
@@ -57,11 +72,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $departmentId
         ]);
 
-        // Redirect to main page with a success
-        header("Location: ../index.php?success=1");
+        // If success then show success toast
+        $_SESSION['toast'] = [
+            'type' => 'success',
+            'message' => 'Contact ajouté avec succès !'
+        ];
+
+        // Redirect to homepage
+        header("Location: ../index.php");
         exit();
     } catch (PDOException $e) {
-        die("Erreur lors de l'ajout du contact : " . $e->getMessage());
+        // If fail then show error toast
+        $_SESSION['toast'] = [
+            'type' => 'error',
+            'message' => 'Erreur lors de l\'ajout du contact.'
+        ];
+        header("Location: ../index.php");
+        exit();
     }
 } else {
     // Redirect to main page if it is not a POST request
